@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tree-sitter-marko"
+description = "A parser for marko.js"
+version = "0.1.0"
+keywords = ["incremental", "parsing", "tree-sitter", "marko"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Compilers",
+  "Topic :: Text Processing :: Linguistic",
+  "Typing :: Typed",
+]
+authors = [{ name = "rhammock1", email = "rhamm1027@gmail.com" }]
+requires-python = ">=3.9"
+license.text = "MIT"
+readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/tree-sitter/tree-sitter-marko"
+
+[project.optional-dependencies]
+core = ["tree-sitter~=0.22"]
+
+[tool.cibuildwheel]
+build = "cp39-*"
+build-frontend = "build"
