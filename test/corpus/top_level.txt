@@ -1,0 +1,64 @@
+==================
+Import statement
+==================
+
+import util from './util';
+
+---
+
+(source_file
+  (import_statement))
+
+==================
+Class block
+==================
+
+class {
+  onCreate() {
+    this.state = { count: 0 };
+  }
+}
+
+---
+
+(source_file
+  (class_block))
+
+==================
+Style block
+==================
+
+style {
+  .container { color: red; }
+}
+
+---
+
+(source_file
+  (style_block))
+
+==================
+Style with language
+==================
+
+style.less {
+  .container { color: red; }
+}
+
+---
+
+(source_file
+  (style_block (style_language)))
+
+==================
+Static block
+==================
+
+static {
+  const helpers = require('./helpers');
+}
+
+---
+
+(source_file
+  (static_block))

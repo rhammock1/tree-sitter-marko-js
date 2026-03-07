@@ -1,0 +1,56 @@
+import util from './util'
+
+class {
+  onCreate() {
+    this.state = {
+      count: 0,
+      items: ['apple', 'banana', 'cherry']
+    };
+  }
+
+  increment() {
+    this.state.count++;
+  }
+}
+
+style {
+  .counter {
+    font-size: 24px;
+    color: blue;
+  }
+  .item {
+    padding: 4px;
+  }
+}
+
+$ const doubled = state.count * 2;
+
+<div.counter#main>
+  <h1>Count: ${state.count}</h1>
+  <p>Doubled: ${doubled}</p>
+
+  <button on-click('increment')>
+    Increment
+  </button>
+
+  <if(state.count > 0)>
+    <p>Count is positive</p>
+  </if>
+
+  <for|item, index| of=state.items>
+    <div.item key=index>
+      ${index}: ${item}
+    </div>
+  </for>
+
+  <!-- This is a comment -->
+  // Line comment
+
+  <macro|data| name="greeting">
+    <span>Hello ${data.name}</span>
+  </macro>
+
+  <${state.dynamicTag} class="dynamic">
+    Dynamic content
+  </>
+</div>

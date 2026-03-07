@@ -1,0 +1,46 @@
+==================
+HTML comment
+==================
+
+<!-- This is a comment -->
+
+---
+
+(source_file
+  (html_comment (comment_content)))
+
+==================
+Multi-line HTML comment
+==================
+
+<!--
+  This is a
+  multi-line comment
+-->
+
+---
+
+(source_file
+  (html_comment (comment_content)))
+
+==================
+Line comment
+==================
+
+// this is a line comment
+
+---
+
+(source_file
+  (line_comment))
+
+==================
+Empty HTML comment
+==================
+
+<!---->
+
+---
+
+(source_file
+  (html_comment))

@@ -1,0 +1,33 @@
+import getUser from './api'
+
+<let/count=0/>
+<const/doubled=count*2/>
+<id/myForm/>
+
+<div>
+  <h1>Marko 6 Example</h1>
+
+  <p>Count: ${count}</p>
+  <p>Doubled: ${doubled}</p>
+
+  <button on-click('increment')>
+    Increment
+  </button>
+
+  <input value:=count/>
+
+  <if(count > 10)>
+    <p>Big number!</p>
+  <else>
+    <p>Small number</p>
+  </else>
+  </if>
+
+  <for|item| of=items>
+    <div>${item}</div>
+  </for>
+
+  <app-counter/counter>
+    <p>Counter value: ${counter}</p>
+  </app-counter>
+</div>

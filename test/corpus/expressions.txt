@@ -1,0 +1,41 @@
+==================
+Simple inline expression
+==================
+
+<div>${name}</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (inline_expression)
+    (end_tag (tag_name))))
+
+==================
+Expression with property access
+==================
+
+<div>${user.name}</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (inline_expression)
+    (end_tag (tag_name))))
+
+==================
+Expression with function call
+==================
+
+<div>${getName()}</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (inline_expression)
+    (end_tag (tag_name))))

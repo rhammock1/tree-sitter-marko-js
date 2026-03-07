@@ -1,0 +1,54 @@
+==================
+Single parameter
+==================
+
+<mouse|position|>
+  <div>${position.x}</div>
+</mouse>
+
+---
+
+(source_file
+  (element
+    (start_tag
+      (tag_name)
+      (tag_parameters (identifier)))
+    (element
+      (start_tag (tag_name))
+      (inline_expression)
+      (end_tag (tag_name)))
+    (end_tag (tag_name))))
+
+==================
+Multiple parameters
+==================
+
+<mouse|x, y, isDown|>
+  <div>coords</div>
+</mouse>
+
+---
+
+(source_file
+  (element
+    (start_tag
+      (tag_name)
+      (tag_parameters (identifier) (identifier) (identifier)))
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)))
+    (end_tag (tag_name))))
+
+==================
+Parameters on self-closing
+==================
+
+<mouse|position|/>
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (tag_parameters (identifier))))

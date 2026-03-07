@@ -1,0 +1,55 @@
+==================
+Shorthand class
+==================
+
+<div.container>text</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name) (shorthand_class))
+    (text)
+    (end_tag (tag_name))))
+
+==================
+Shorthand id
+==================
+
+<div#main>text</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name) (shorthand_id))
+    (text)
+    (end_tag (tag_name))))
+
+==================
+Combined class and id
+==================
+
+<div.container#main>text</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name) (shorthand_class) (shorthand_id))
+    (text)
+    (end_tag (tag_name))))
+
+==================
+Multiple classes
+==================
+
+<div.foo.bar>text</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name) (shorthand_class) (shorthand_class))
+    (text)
+    (end_tag (tag_name))))

@@ -1,0 +1,35 @@
+==================
+Scriptlet line const
+==================
+
+$ const x = 1;
+
+---
+
+(source_file
+  (scriptlet_line))
+
+==================
+Scriptlet line let
+==================
+
+$ let y = fn();
+
+---
+
+(source_file
+  (scriptlet_line))
+
+==================
+Scriptlet block
+==================
+
+$ {
+  const x = 1;
+  const y = 2;
+}
+
+---
+
+(source_file
+  (scriptlet_block))

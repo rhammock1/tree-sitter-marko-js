@@ -1,0 +1,58 @@
+==================
+Deeply nested elements
+==================
+
+<div><span><a>deep</a></span></div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (element
+      (start_tag (tag_name))
+      (element
+        (start_tag (tag_name))
+        (text)
+        (end_tag (tag_name)))
+      (end_tag (tag_name)))
+    (end_tag (tag_name))))
+
+==================
+Empty self-closing tag
+==================
+
+<br/>
+
+---
+
+(source_file
+  (self_closing_tag (tag_name)))
+
+==================
+Adjacent expressions
+==================
+
+<div>${a}${b}</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (inline_expression)
+    (inline_expression)
+    (end_tag (tag_name))))
+
+==================
+Tag with no attributes
+==================
+
+<custom-component></custom-component>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (end_tag (tag_name))))

@@ -1,0 +1,74 @@
+==================
+Let tag variable
+==================
+
+<let/count=0/>
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (tag_variable (identifier) (attribute_value))))
+
+==================
+Const tag variable
+==================
+
+<const/doubled=count*2/>
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (tag_variable (identifier) (attribute_value))))
+
+==================
+Id tag variable
+==================
+
+<id/myId/>
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (tag_variable (identifier))))
+
+==================
+Bound attribute
+==================
+
+<input value:=name/>
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (attribute
+      (attribute_name)
+      (attribute_value))))
+
+==================
+Tag variable on element with body
+==================
+
+<app-counter/counter>
+  <div>${counter}</div>
+</app-counter>
+
+---
+
+(source_file
+  (element
+    (start_tag
+      (tag_name)
+      (tag_variable (identifier)))
+    (element
+      (start_tag (tag_name))
+      (inline_expression)
+      (end_tag (tag_name)))
+    (end_tag (tag_name))))

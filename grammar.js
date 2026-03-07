@@ -10,147 +10,305 @@
 module.exports = grammar({
   name: 'marko',
 
+  externals: $ => [
+    $._raw_text,
+    $._js_expression,
+    $._js_paren_expression,
+    $._js_line_expression,
+    $.comment_content,
+  ],
+
+  extras: $ => [/\s+/],
+
+  word: $ => $.identifier,
+
+  conflicts: $ => [
+    [$.start_tag, $.self_closing_tag],
+    [$.static_statement, $.static_block],
+    [$.scriptlet_line, $.scriptlet_block],
+  ],
+
   rules: {
-    // Entry point
-    source_file: $ => repeat($._node),
+    source_file: $ => repeat($._definition),
+
+    _definition: $ => choice(
+      $._top_level_statement,
+      $._node,
+    ),
+
+    _top_level_statement: $ => choice(
+      $.import_statement,
+      $.static_block,
+      $.static_statement,
+      $.class_block,
+      $.style_block,
+      $.scriptlet_block,
+      $.scriptlet_line,
+    ),
 
     _node: $ => choice(
-      $.text,
       $.element,
-      $.for_block,
-      $.if_block,
-      $.javascript_block,
-      $.html_inline_js,
-      $.inline_javascript_expression,
-      $.block_comment,
-      $.inline_comment,
-    ),
-
-    block_comment: $ => seq(
-      '<!--',
-      optional(repeat(choice($.node_name, $.element, $.for_block, $.if_block, $.javascript_block, $.html_inline_js, $.inline_javascript_expression))),
-      '-->',
-    ),
-
-    inline_comment: $ => seq(
-      '//',
-      optional($.any_text),
-    ),
-
-    element: $ => choice(
-      seq(
-        $.start_tag,
-        repeat($._node),
-        $.end_tag,
-      ),
       $.self_closing_tag,
+      $.dynamic_element,
+      $.dynamic_self_closing_tag,
+      $.if_tag,
+      $.for_tag,
+      $.while_tag,
+      $.macro_tag,
+      $.text,
+      $.inline_expression,
+      $.html_comment,
+      $.line_comment,
+    ),
+
+    // Elements
+    element: $ => seq(
+      $.start_tag,
+      repeat($._node),
+      $.end_tag,
     ),
 
     start_tag: $ => seq(
       '<',
-      $.node_name,
+      $.tag_name,
+      optional($.tag_variable),
+      repeat(choice(
+        $.shorthand_class,
+        $.shorthand_id,
+      )),
+      optional($.tag_parameters),
+      optional($.tag_argument),
       repeat($.attribute),
       '>',
     ),
 
     end_tag: $ => seq(
       '</',
-      $.node_name,
+      $.tag_name,
       '>',
     ),
 
     self_closing_tag: $ => seq(
       '<',
-      $.node_name,
+      $.tag_name,
+      optional($.tag_variable),
+      repeat(choice(
+        $.shorthand_class,
+        $.shorthand_id,
+      )),
+      optional($.tag_parameters),
+      optional($.tag_argument),
       repeat($.attribute),
       '/>',
     ),
 
-    // Tag name (e.g., <div>, <custom-tag>)
-    node_name: $ => /[a-zA-Z_][a-zA-Z0-9_-]*/,
-
-    // Attributes (e.g., class="value", on-click(...))
-    attribute: $ => seq(
-      $.node_name,
-      optional(seq(
-        optional('='),
-        choice($.string, $.html_inline_js, $.attribute_function_call)
-      ))
+    tag_variable: $ => seq(
+      '/',
+      $.identifier,
+      optional(seq('=', $.attribute_value)),
     ),
 
-    // Attribute function calls (e.g., on-click('handleClick'))
-    attribute_function_call: $ => seq(
-      '(',
-      optional(choice($.string, $.any_text)),
-      ')'
-    ),
+    tag_name: _ => /[a-zA-Z_][a-zA-Z0-9_-]*/,
 
-    inline_javascript_expression: $ => seq('$ ', choice($.variable, $._javascript_content)),
+    shorthand_class: _ => token(seq('.', /[a-zA-Z_-][a-zA-Z0-9_-]*/)),
+    shorthand_id: _ => token(seq('#', /[a-zA-Z_-][a-zA-Z0-9_-]*/)),
 
-    // Inline JavaScript expression (e.g., ${expression})
-    // html_inline_js: $ => seq('${', $._javascript_content, '}'),
-    html_inline_js: _ => /\$\{[^{}]+}/,
-
-    // JavaScript blocks (e.g., $ { ... })
-    javascript_block: $ => seq(
-      '$',
-      '{',
-      $.any_text,
-      '}'
-    ),
-
-    // For-loop blocks (e.g., <for|item| of=state.items>...</for>)
-    for_block: $ => seq(
-      '<for|',
-      $.variable_name,
+    tag_parameters: $ => seq(
       '|',
-      'of=',
-      $._javascript_content,
+      $.identifier,
+      repeat(seq(',', $.identifier)),
+      '|',
+    ),
+
+    tag_argument: $ => seq(
+      '(',
+      $._js_paren_expression,
+      ')',
+    ),
+
+    // Control flow tags
+    if_tag: $ => seq(
+      '<if',
+      $.tag_argument,
       '>',
       repeat($._node),
-      '</for>'
-    ),
-
-    if_block: $ => seq(
-      /<if\(/,
-      $._javascript_content,
-      /\)>/,
-      repeat($._node),
+      repeat($.else_if_tag),
+      optional($.else_tag),
       '</if>',
     ),
 
-    const_declaration: _ => /const/,
-    let_declaration: _ => /let/,
-    var_declaration: _ => /var/,
-    arrow_function: _ => /=>/,
-
-    // Variable name (e.g., ingredient in for|ingredient|...)
-    variable_name: _ => /[a-zA-Z_][a-zA-Z0-9_-]+/,
-
-    variable: $ => seq(
-      choice($.const_declaration, $.let_declaration, $.var_declaration),
-      $.variable_name,
-      '=',
-      $.any_text,
+    else_if_tag: $ => seq(
+      '<else-if',
+      $.tag_argument,
+      '>',
+      repeat($._node),
+      '</else-if>',
     ),
 
-    // Any text
-    any_text: $ => /[\w ><={}\[\]'"`\$\-\+\/*%()\|\&.\?]+/,
+    else_tag: $ => seq(
+      '<else>',
+      repeat($._node),
+      '</else>',
+    ),
 
-    // Text content between elements
-    text: $ => /[^<{]+/,
+    for_tag: $ => seq(
+      '<for',
+      optional($.tag_parameters),
+      repeat($.attribute),
+      '>',
+      repeat($._node),
+      '</for>',
+    ),
 
-    raw_text: _ => /[^<>&\s]([^<>&]*[^<>&\s])?/,
+    while_tag: $ => seq(
+      '<while',
+      $.tag_argument,
+      '>',
+      repeat($._node),
+      '</while>',
+    ),
 
-    // Strings (e.g., "value" or 'value')
-    string: $ => choice(
+    macro_tag: $ => seq(
+      '<macro',
+      optional($.tag_parameters),
+      repeat($.attribute),
+      '>',
+      repeat($._node),
+      '</macro>',
+    ),
+
+    // Dynamic elements: <${expr}> ... </>
+    dynamic_element: $ => seq(
+      $.dynamic_start_tag,
+      repeat($._node),
+      $.dynamic_end_tag,
+    ),
+
+    dynamic_start_tag: $ => seq(
+      '<${',
+      $._js_expression,
+      '}',
+      repeat($.attribute),
+      '>',
+    ),
+
+    dynamic_end_tag: $ => choice(
+      '</>',
+      seq('</${', $._js_expression, '}', '>'),
+    ),
+
+    dynamic_self_closing_tag: $ => seq(
+      '<${',
+      $._js_expression,
+      '}',
+      repeat($.attribute),
+      '/>',
+    ),
+
+    // Top-level constructs
+    import_statement: $ => seq(
+      'import',
+      $._js_line_expression,
+    ),
+
+    static_statement: $ => seq(
+      'static',
+      $._js_line_expression,
+    ),
+
+    static_block: $ => prec.dynamic(1, seq(
+      'static',
+      '{',
+      optional($._raw_text),
+      '}',
+    )),
+
+    class_block: $ => seq(
+      'class',
+      '{',
+      optional($._raw_text),
+      '}',
+    ),
+
+    style_block: $ => seq(
+      'style',
+      optional($.style_language),
+      '{',
+      optional($._raw_text),
+      '}',
+    ),
+
+    style_language: _ => token(seq('.', /[a-zA-Z]+/)),
+
+    scriptlet_line: $ => seq(
+      '$',
+      $._js_line_expression,
+    ),
+
+    scriptlet_block: $ => prec.dynamic(1, seq(
+      '$',
+      '{',
+      optional($._raw_text),
+      '}',
+    )),
+
+    // Attributes
+    attribute: $ => choice(
+      $.spread_attribute,
+      seq(
+        $.attribute_name,
+        optional($.attribute_method_args),
+        optional(seq(
+          choice('=', ':='),
+          $.attribute_value,
+        )),
+      ),
+    ),
+
+    attribute_method_args: $ => seq(
+      '(',
+      optional($._js_paren_expression),
+      ')',
+    ),
+
+    attribute_name: _ => /[a-zA-Z_:@][a-zA-Z0-9_:.@-]*/,
+
+    attribute_value: $ => choice(
+      $.quoted_string,
+      $._js_expression,
+    ),
+
+    spread_attribute: $ => seq(
+      '...',
+      $._js_expression,
+    ),
+
+    quoted_string: _ => choice(
       /"[^"]*"/,
       /'[^']*'/,
       /`[^`]*`/,
     ),
 
-    // Placeholder for JavaScript content
-    _javascript_content: $ => /[^{}<>]+/,
-  }
-});
+    // Text content - must start with a non-whitespace, non-special character
+    text: _ => token(prec(-1, /[^<$\/\n\s][^<$]*/)),
 
+    // Inline expression: ${expr}
+    inline_expression: $ => seq(
+      '${',
+      $._js_expression,
+      '}',
+    ),
+
+    // Comments
+    html_comment: $ => seq(
+      '<!--',
+      optional($.comment_content),
+      '-->',
+    ),
+
+    line_comment: _ => token(seq('//', /[^\n]*/)),
+
+    // Identifiers (for tag parameters)
+    identifier: _ => /[a-zA-Z_$][a-zA-Z0-9_$]*/,
+  },
+});

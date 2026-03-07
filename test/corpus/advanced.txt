@@ -1,0 +1,71 @@
+==================
+Spread attribute
+==================
+
+<div ...input>text</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name) (attribute (spread_attribute)))
+    (text)
+    (end_tag (tag_name))))
+
+==================
+Dynamic tag
+==================
+
+<${dynamicTag}>content</>
+
+---
+
+(source_file
+  (dynamic_element
+    (dynamic_start_tag)
+    (text)
+    (dynamic_end_tag)))
+
+==================
+Dynamic self-closing tag
+==================
+
+<${component}/>
+
+---
+
+(source_file
+  (dynamic_self_closing_tag))
+
+==================
+Dynamic tag with attributes
+==================
+
+<${myTag} class="foo">content</>
+
+---
+
+(source_file
+  (dynamic_element
+    (dynamic_start_tag
+      (attribute (attribute_name) (attribute_value (quoted_string))))
+    (text)
+    (dynamic_end_tag)))
+
+==================
+Method shorthand on-click
+==================
+
+<button on-click('handleClick')>Click</button>
+
+---
+
+(source_file
+  (element
+    (start_tag
+      (tag_name)
+      (attribute
+        (attribute_name)
+        (attribute_method_args)))
+    (text)
+    (end_tag (tag_name))))

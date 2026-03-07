@@ -7,7 +7,10 @@
       "file-types": [
         ".marko"
       ],
-      "injection-regex": "^marko$"
+      "injection-regex": "^marko$",
+      "external-scanner": {
+        "c": true
+      }
     }
   ],
   "metadata": {

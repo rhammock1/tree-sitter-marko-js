@@ -8,26 +8,31 @@
       "required": true,
       "types": [
         {
-          "type": "attribute_function_call",
+          "type": "attribute_method_args",
           "named": true
         },
         {
-          "type": "html_inline_js",
+          "type": "attribute_name",
           "named": true
         },
         {
-          "type": "node_name",
+          "type": "attribute_value",
           "named": true
         },
         {
-          "type": "string",
+          "type": "spread_attribute",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "attribute_function_call",
+    "type": "attribute_method_args",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "attribute_value",
     "named": true,
     "fields": {},
     "children": {
@@ -35,18 +40,91 @@
       "required": false,
       "types": [
         {
-          "type": "any_text",
-          "named": true
-        },
-        {
-          "type": "string",
+          "type": "quoted_string",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "block_comment",
+    "type": "class_block",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "dynamic_element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dynamic_element",
+          "named": true
+        },
+        {
+          "type": "dynamic_end_tag",
+          "named": true
+        },
+        {
+          "type": "dynamic_self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "dynamic_start_tag",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "for_tag",
+          "named": true
+        },
+        {
+          "type": "html_comment",
+          "named": true
+        },
+        {
+          "type": "if_tag",
+          "named": true
+        },
+        {
+          "type": "inline_expression",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "macro_tag",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        },
+        {
+          "type": "while_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "dynamic_end_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "dynamic_self_closing_tag",
     "named": true,
     "fields": {},
     "children": {
@@ -54,31 +132,22 @@
       "required": false,
       "types": [
         {
-          "type": "element",
+          "type": "attribute",
           "named": true
-        },
+        }
+      ]
+    }
+  },
+  {
+    "type": "dynamic_start_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
         {
-          "type": "for_block",
-          "named": true
-        },
-        {
-          "type": "html_inline_js",
-          "named": true
-        },
-        {
-          "type": "if_block",
-          "named": true
-        },
-        {
-          "type": "inline_javascript_expression",
-          "named": true
-        },
-        {
-          "type": "javascript_block",
-          "named": true
-        },
-        {
-          "type": "node_name",
+          "type": "attribute",
           "named": true
         }
       ]
@@ -93,7 +162,11 @@
       "required": true,
       "types": [
         {
-          "type": "block_comment",
+          "type": "dynamic_element",
+          "named": true
+        },
+        {
+          "type": "dynamic_self_closing_tag",
           "named": true
         },
         {
@@ -105,27 +178,27 @@
           "named": true
         },
         {
-          "type": "for_block",
+          "type": "for_tag",
           "named": true
         },
         {
-          "type": "html_inline_js",
+          "type": "html_comment",
           "named": true
         },
         {
-          "type": "if_block",
+          "type": "if_tag",
           "named": true
         },
         {
-          "type": "inline_comment",
+          "type": "inline_expression",
           "named": true
         },
         {
-          "type": "inline_javascript_expression",
+          "type": "line_comment",
           "named": true
         },
         {
-          "type": "javascript_block",
+          "type": "macro_tag",
           "named": true
         },
         {
@@ -138,6 +211,132 @@
         },
         {
           "type": "text",
+          "named": true
+        },
+        {
+          "type": "while_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "else_if_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dynamic_element",
+          "named": true
+        },
+        {
+          "type": "dynamic_self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "for_tag",
+          "named": true
+        },
+        {
+          "type": "html_comment",
+          "named": true
+        },
+        {
+          "type": "if_tag",
+          "named": true
+        },
+        {
+          "type": "inline_expression",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "macro_tag",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "tag_argument",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        },
+        {
+          "type": "while_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "else_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "dynamic_element",
+          "named": true
+        },
+        {
+          "type": "dynamic_self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "for_tag",
+          "named": true
+        },
+        {
+          "type": "html_comment",
+          "named": true
+        },
+        {
+          "type": "if_tag",
+          "named": true
+        },
+        {
+          "type": "inline_expression",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "macro_tag",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        },
+        {
+          "type": "while_tag",
           "named": true
         }
       ]
@@ -152,65 +351,14 @@
       "required": true,
       "types": [
         {
-          "type": "node_name",
+          "type": "tag_name",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "for_block",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "block_comment",
-          "named": true
-        },
-        {
-          "type": "element",
-          "named": true
-        },
-        {
-          "type": "for_block",
-          "named": true
-        },
-        {
-          "type": "html_inline_js",
-          "named": true
-        },
-        {
-          "type": "if_block",
-          "named": true
-        },
-        {
-          "type": "inline_comment",
-          "named": true
-        },
-        {
-          "type": "inline_javascript_expression",
-          "named": true
-        },
-        {
-          "type": "javascript_block",
-          "named": true
-        },
-        {
-          "type": "text",
-          "named": true
-        },
-        {
-          "type": "variable_name",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "if_block",
+    "type": "for_tag",
     "named": true,
     "fields": {},
     "children": {
@@ -218,7 +366,15 @@
       "required": false,
       "types": [
         {
-          "type": "block_comment",
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "dynamic_element",
+          "named": true
+        },
+        {
+          "type": "dynamic_self_closing_tag",
           "named": true
         },
         {
@@ -226,38 +382,50 @@
           "named": true
         },
         {
-          "type": "for_block",
+          "type": "for_tag",
           "named": true
         },
         {
-          "type": "html_inline_js",
+          "type": "html_comment",
           "named": true
         },
         {
-          "type": "if_block",
+          "type": "if_tag",
           "named": true
         },
         {
-          "type": "inline_comment",
+          "type": "inline_expression",
           "named": true
         },
         {
-          "type": "inline_javascript_expression",
+          "type": "line_comment",
           "named": true
         },
         {
-          "type": "javascript_block",
+          "type": "macro_tag",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "tag_parameters",
           "named": true
         },
         {
           "type": "text",
           "named": true
+        },
+        {
+          "type": "while_tag",
+          "named": true
         }
       ]
     }
   },
   {
-    "type": "inline_comment",
+    "type": "html_comment",
     "named": true,
     "fields": {},
     "children": {
@@ -265,41 +433,174 @@
       "required": false,
       "types": [
         {
-          "type": "any_text",
+          "type": "comment_content",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "inline_javascript_expression",
+    "type": "if_tag",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "variable",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "javascript_block",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "any_text",
+          "type": "dynamic_element",
+          "named": true
+        },
+        {
+          "type": "dynamic_self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "else_if_tag",
+          "named": true
+        },
+        {
+          "type": "else_tag",
+          "named": true
+        },
+        {
+          "type": "for_tag",
+          "named": true
+        },
+        {
+          "type": "html_comment",
+          "named": true
+        },
+        {
+          "type": "if_tag",
+          "named": true
+        },
+        {
+          "type": "inline_expression",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "macro_tag",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "tag_argument",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        },
+        {
+          "type": "while_tag",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "import_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "inline_expression",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "macro_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "dynamic_element",
+          "named": true
+        },
+        {
+          "type": "dynamic_self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "for_tag",
+          "named": true
+        },
+        {
+          "type": "html_comment",
+          "named": true
+        },
+        {
+          "type": "if_tag",
+          "named": true
+        },
+        {
+          "type": "inline_expression",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "macro_tag",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "tag_parameters",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        },
+        {
+          "type": "while_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "quoted_string",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "scriptlet_block",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "scriptlet_line",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "self_closing_tag",
@@ -314,7 +615,27 @@
           "named": true
         },
         {
-          "type": "node_name",
+          "type": "shorthand_class",
+          "named": true
+        },
+        {
+          "type": "shorthand_id",
+          "named": true
+        },
+        {
+          "type": "tag_argument",
+          "named": true
+        },
+        {
+          "type": "tag_name",
+          "named": true
+        },
+        {
+          "type": "tag_parameters",
+          "named": true
+        },
+        {
+          "type": "tag_variable",
           "named": true
         }
       ]
@@ -330,7 +651,15 @@
       "required": false,
       "types": [
         {
-          "type": "block_comment",
+          "type": "class_block",
+          "named": true
+        },
+        {
+          "type": "dynamic_element",
+          "named": true
+        },
+        {
+          "type": "dynamic_self_closing_tag",
           "named": true
         },
         {
@@ -338,35 +667,72 @@
           "named": true
         },
         {
-          "type": "for_block",
+          "type": "for_tag",
           "named": true
         },
         {
-          "type": "html_inline_js",
+          "type": "html_comment",
           "named": true
         },
         {
-          "type": "if_block",
+          "type": "if_tag",
           "named": true
         },
         {
-          "type": "inline_comment",
+          "type": "import_statement",
           "named": true
         },
         {
-          "type": "inline_javascript_expression",
+          "type": "inline_expression",
           "named": true
         },
         {
-          "type": "javascript_block",
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "macro_tag",
+          "named": true
+        },
+        {
+          "type": "scriptlet_block",
+          "named": true
+        },
+        {
+          "type": "scriptlet_line",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "static_block",
+          "named": true
+        },
+        {
+          "type": "static_statement",
+          "named": true
+        },
+        {
+          "type": "style_block",
           "named": true
         },
         {
           "type": "text",
           "named": true
+        },
+        {
+          "type": "while_tag",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "spread_attribute",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "start_tag",
@@ -381,19 +747,64 @@
           "named": true
         },
         {
-          "type": "node_name",
+          "type": "shorthand_class",
+          "named": true
+        },
+        {
+          "type": "shorthand_id",
+          "named": true
+        },
+        {
+          "type": "tag_argument",
+          "named": true
+        },
+        {
+          "type": "tag_name",
+          "named": true
+        },
+        {
+          "type": "tag_parameters",
+          "named": true
+        },
+        {
+          "type": "tag_variable",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "string",
+    "type": "static_block",
     "named": true,
     "fields": {}
   },
   {
-    "type": "variable",
+    "type": "static_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "style_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "style_language",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tag_argument",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "tag_parameters",
     "named": true,
     "fields": {},
     "children": {
@@ -401,23 +812,89 @@
       "required": true,
       "types": [
         {
-          "type": "any_text",
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tag_variable",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute_value",
           "named": true
         },
         {
-          "type": "const_declaration",
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "while_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dynamic_element",
           "named": true
         },
         {
-          "type": "let_declaration",
+          "type": "dynamic_self_closing_tag",
           "named": true
         },
         {
-          "type": "var_declaration",
+          "type": "element",
           "named": true
         },
         {
-          "type": "variable_name",
+          "type": "for_tag",
+          "named": true
+        },
+        {
+          "type": "html_comment",
+          "named": true
+        },
+        {
+          "type": "if_tag",
+          "named": true
+        },
+        {
+          "type": "inline_expression",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "macro_tag",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "tag_argument",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        },
+        {
+          "type": "while_tag",
           "named": true
         }
       ]
@@ -428,7 +905,7 @@
     "named": false
   },
   {
-    "type": "$ ",
+    "type": "${",
     "named": false
   },
   {
@@ -440,15 +917,27 @@
     "named": false
   },
   {
+    "type": ",",
+    "named": false
+  },
+  {
     "type": "-->",
     "named": false
   },
   {
-    "type": "//",
+    "type": "...",
+    "named": false
+  },
+  {
+    "type": "/",
     "named": false
   },
   {
     "type": "/>",
+    "named": false
+  },
+  {
+    "type": ":=",
     "named": false
   },
   {
@@ -460,7 +949,27 @@
     "named": false
   },
   {
+    "type": "<${",
+    "named": false
+  },
+  {
     "type": "</",
+    "named": false
+  },
+  {
+    "type": "</${",
+    "named": false
+  },
+  {
+    "type": "</>",
+    "named": false
+  },
+  {
+    "type": "</else-if>",
+    "named": false
+  },
+  {
+    "type": "</else>",
     "named": false
   },
   {
@@ -472,7 +981,35 @@
     "named": false
   },
   {
-    "type": "<for|",
+    "type": "</macro>",
+    "named": false
+  },
+  {
+    "type": "</while>",
+    "named": false
+  },
+  {
+    "type": "<else-if",
+    "named": false
+  },
+  {
+    "type": "<else>",
+    "named": false
+  },
+  {
+    "type": "<for",
+    "named": false
+  },
+  {
+    "type": "<if",
+    "named": false
+  },
+  {
+    "type": "<macro",
+    "named": false
+  },
+  {
+    "type": "<while",
     "named": false
   },
   {
@@ -484,39 +1021,55 @@
     "named": false
   },
   {
-    "type": "any_text",
+    "type": "attribute_name",
     "named": true
   },
   {
-    "type": "const_declaration",
-    "named": true
-  },
-  {
-    "type": "html_inline_js",
-    "named": true
-  },
-  {
-    "type": "let_declaration",
-    "named": true
-  },
-  {
-    "type": "node_name",
-    "named": true
-  },
-  {
-    "type": "of=",
+    "type": "class",
     "named": false
   },
   {
+    "type": "comment_content",
+    "named": true
+  },
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "import",
+    "named": false
+  },
+  {
+    "type": "line_comment",
+    "named": true
+  },
+  {
+    "type": "shorthand_class",
+    "named": true
+  },
+  {
+    "type": "shorthand_id",
+    "named": true
+  },
+  {
+    "type": "static",
+    "named": false
+  },
+  {
+    "type": "style",
+    "named": false
+  },
+  {
+    "type": "style_language",
+    "named": true
+  },
+  {
+    "type": "tag_name",
+    "named": true
+  },
+  {
     "type": "text",
-    "named": true
-  },
-  {
-    "type": "var_declaration",
-    "named": true
-  },
-  {
-    "type": "variable_name",
     "named": true
   },
   {

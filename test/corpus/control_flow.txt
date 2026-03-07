@@ -1,0 +1,167 @@
+==================
+If with content
+==================
+
+<if(show)>
+  <div>visible</div>
+</if>
+
+---
+
+(source_file
+  (if_tag
+    (tag_argument)
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)))))
+
+==================
+If else chain
+==================
+
+<if(x > 0)>
+  <span>positive</span>
+</if>
+
+---
+
+(source_file
+  (if_tag
+    (tag_argument)
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)))))
+
+==================
+If else-if else
+==================
+
+<if(status === 'active')>
+  <span>active</span>
+<else-if(status === 'pending')>
+  <span>pending</span>
+</else-if>
+<else>
+  <span>inactive</span>
+</else>
+</if>
+
+---
+
+(source_file
+  (if_tag
+    (tag_argument)
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)))
+    (else_if_tag
+      (tag_argument)
+      (element
+        (start_tag (tag_name))
+        (text)
+        (end_tag (tag_name))))
+    (else_tag
+      (element
+        (start_tag (tag_name))
+        (text)
+        (end_tag (tag_name))))))
+
+==================
+For of loop
+==================
+
+<for|item| of=items>
+  <div>${item.name}</div>
+</for>
+
+---
+
+(source_file
+  (for_tag
+    (tag_parameters (identifier))
+    (attribute (attribute_name) (attribute_value))
+    (element
+      (start_tag (tag_name))
+      (inline_expression)
+      (end_tag (tag_name)))))
+
+==================
+For of with index
+==================
+
+<for|item, index| of=items>
+  <div>${index}</div>
+</for>
+
+---
+
+(source_file
+  (for_tag
+    (tag_parameters (identifier) (identifier))
+    (attribute (attribute_name) (attribute_value))
+    (element
+      (start_tag (tag_name))
+      (inline_expression)
+      (end_tag (tag_name)))))
+
+==================
+For range
+==================
+
+<for|i| from=0 to=10 step=2>
+  <div>${i}</div>
+</for>
+
+---
+
+(source_file
+  (for_tag
+    (tag_parameters (identifier))
+    (attribute (attribute_name) (attribute_value))
+    (attribute (attribute_name) (attribute_value))
+    (attribute (attribute_name) (attribute_value))
+    (element
+      (start_tag (tag_name))
+      (inline_expression)
+      (end_tag (tag_name)))))
+
+==================
+While loop
+==================
+
+<while(count < 10)>
+  <div>counting</div>
+</while>
+
+---
+
+(source_file
+  (while_tag
+    (tag_argument)
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)))))
+
+==================
+Macro with params
+==================
+
+<macro|data| name="greeting">
+  <div>Hello ${data.name}</div>
+</macro>
+
+---
+
+(source_file
+  (macro_tag
+    (tag_parameters (identifier))
+    (attribute (attribute_name) (attribute_value (quoted_string)))
+    (element
+      (start_tag (tag_name))
+      (text)
+      (inline_expression)
+      (end_tag (tag_name)))))
