@@ -41,7 +41,7 @@ Id tag variable
 Bound attribute
 ==================
 
-<input value:=name/>
+<custom-field value:=name/>
 
 ---
 

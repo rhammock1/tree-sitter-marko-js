@@ -51,6 +51,28 @@ style.less {
   (style_block (style_language)))
 
 ==================
+Destructured import
+==================
+
+import { toJS } from 'mobx';
+
+---
+
+(source_file
+  (import_statement))
+
+==================
+Destructured import multiple
+==================
+
+import { toJS, observable } from 'mobx';
+
+---
+
+(source_file
+  (import_statement))
+
+==================
 Static block
 ==================
 

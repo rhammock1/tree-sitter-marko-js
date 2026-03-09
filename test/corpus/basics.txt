@@ -16,7 +16,7 @@ Simple element
 Self-closing element
 ==================
 
-<input/>
+<custom-tag/>
 
 ---
 
@@ -60,7 +60,7 @@ Element with string attribute
 Element with multiple attributes
 ==================
 
-<input type="text" name="field" disabled/>
+<custom-input type="text" name="field" disabled/>
 
 ---
 

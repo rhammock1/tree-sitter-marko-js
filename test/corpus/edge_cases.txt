@@ -22,7 +22,7 @@ Deeply nested elements
 Empty self-closing tag
 ==================
 
-<br/>
+<my-tag/>
 
 ---
 
@@ -55,4 +55,385 @@ Tag with no attributes
 (source_file
   (element
     (start_tag (tag_name))
+    (end_tag (tag_name))))
+
+==================
+At-prefixed tag name
+==================
+
+<@header>
+  content
+</@header>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (text)
+    (end_tag (tag_name))))
+
+==================
+At-prefixed self-closing tag
+==================
+
+<@body/>
+
+---
+
+(source_file
+  (self_closing_tag (tag_name)))
+
+==================
+Comment does not leak into content
+==================
+
+<!-- comment -->
+<div>content</div>
+
+---
+
+(source_file
+  (html_comment (comment_content))
+  (element
+    (start_tag (tag_name))
+    (text)
+    (end_tag (tag_name))))
+
+==================
+Multiple comments with content between
+==================
+
+<!-- first -->
+<div>middle</div>
+<!-- second -->
+
+---
+
+(source_file
+  (html_comment (comment_content))
+  (element
+    (start_tag (tag_name))
+    (text)
+    (end_tag (tag_name)))
+  (html_comment (comment_content)))
+
+==================
+Inline expression with logical OR
+==================
+
+<p>${name || 'Anonymous'}</p>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (inline_expression)
+    (end_tag (tag_name))))
+
+==================
+Inline expression with ternary
+==================
+
+<p>${count > 0 ? 'yes' : 'no'}</p>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (inline_expression)
+    (end_tag (tag_name))))
+
+==================
+Attribute value with && operator
+==================
+
+<div visible=state.ready && !state.loading/>
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (attribute
+      (attribute_name)
+      (attribute_value))))
+
+==================
+Scriptlet block inside element
+==================
+
+<div>
+  $ {
+    const x = 1;
+  }
+</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (scriptlet_block)
+    (end_tag (tag_name))))
+
+==================
+Scriptlet line inside element
+==================
+
+<div>
+  $ const x = 1;
+</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (scriptlet_line)
+    (end_tag (tag_name))))
+
+==================
+Attribute method body
+==================
+
+<button onClick(){console.log('clicked')}/>
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (attribute
+      (attribute_name)
+      (attribute_method_args)
+      (attribute_method_body))))
+
+==================
+Dynamic tag with ternary expression
+==================
+
+<${showDrawer ? drawer : modal} id="test">
+  text
+</>
+
+---
+
+(source_file
+  (dynamic_element
+    (dynamic_start_tag
+      (attribute
+        (attribute_name)
+        (attribute_value
+          (quoted_string))))
+    (text)
+    (dynamic_end_tag)))
+
+==================
+Dynamic tag with tag parameters
+==================
+
+<${component}|{toggle}| id="test"/>
+
+---
+
+(source_file
+  (dynamic_self_closing_tag
+    (tag_parameters
+      (destructured_param))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (quoted_string)))))
+
+==================
+Sibling if else-if else
+==================
+
+<if(x)>
+  a
+</if>
+<else-if(y)>
+  b
+</else-if>
+<else>
+  c
+</else>
+
+---
+
+(source_file
+  (if_tag
+    (tag_argument)
+    (text))
+  (else_if_tag
+    (tag_argument)
+    (text))
+  (else_tag
+    (text)))
+
+==================
+Destructured tag parameters
+==================
+
+<for|{name, age}| of=items>
+  text
+</for>
+
+---
+
+(source_file
+  (for_tag
+    (tag_parameters
+      (destructured_param))
+    (attribute
+      (attribute_name)
+      (attribute_value))
+    (text)))
+
+==================
+Void element hr
+==================
+
+<div>
+  <hr>
+  text
+</div>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (void_element (tag_name))
+    (text)
+    (end_tag (tag_name))))
+
+==================
+Void element img with attributes
+==================
+
+<img src="photo.jpg" class="avatar" height="54px">
+
+---
+
+(source_file
+  (void_element
+    (tag_name)
+    (attribute (attribute_name) (attribute_value (quoted_string)))
+    (attribute (attribute_name) (attribute_value (quoted_string)))
+    (attribute (attribute_name) (attribute_value (quoted_string)))))
+
+==================
+Void element br self-closing
+==================
+
+<br/>
+
+---
+
+(source_file
+  (void_element (tag_name)))
+
+==================
+Void input with attributes
+==================
+
+<input name="field" type="hidden" value=1/>
+
+---
+
+(source_file
+  (void_element
+    (tag_name)
+    (attribute (attribute_name) (attribute_value (quoted_string)))
+    (attribute (attribute_name) (attribute_value (quoted_string)))
+    (attribute (attribute_name) (attribute_value))))
+
+==================
+Shorthand close tag
+==================
+
+<div>hello</>
+
+---
+
+(source_file
+  (element
+    (start_tag (tag_name))
+    (text)
+    (end_tag)))
+
+==================
+Dynamic element with shorthand close
+==================
+
+<${showDrawer ? drawer : modal} open=state.open>
+  <div>content</div>
+</>
+
+---
+
+(source_file
+  (dynamic_element
+    (dynamic_start_tag
+      (attribute (attribute_name) (attribute_value)))
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)))
+    (dynamic_end_tag)))
+
+==================
+Form inside if tag
+==================
+
+<if(items.length)>
+  <form method="POST" novalidate>
+    <div>content</div>
+  </form>
+</if>
+
+---
+
+(source_file
+  (if_tag
+    (tag_argument)
+    (element
+      (start_tag
+        (tag_name)
+        (attribute (attribute_name) (attribute_value (quoted_string)))
+        (attribute (attribute_name)))
+      (element
+        (start_tag (tag_name))
+        (text)
+        (end_tag (tag_name)))
+      (end_tag (tag_name)))))
+
+==================
+For tag does not match form
+==================
+
+<form action="/submit">
+  <for|item| of=items>
+    <div>${item}</div>
+  </for>
+</form>
+
+---
+
+(source_file
+  (element
+    (start_tag
+      (tag_name)
+      (attribute (attribute_name) (attribute_value (quoted_string))))
+    (for_tag
+      (tag_parameters (identifier))
+      (attribute (attribute_name) (attribute_value))
+      (element
+        (start_tag (tag_name))
+        (inline_expression)
+        (end_tag (tag_name))))
     (end_tag (tag_name))))
