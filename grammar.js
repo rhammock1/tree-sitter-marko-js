@@ -16,6 +16,7 @@ module.exports = grammar({
     $._js_paren_expression,
     $._js_line_expression,
     $.comment_content,
+    $._js_import_line,
   ],
 
   extras: $ => [/\s+/],
@@ -23,9 +24,6 @@ module.exports = grammar({
   word: $ => $.identifier,
 
   conflicts: $ => [
-    [$.start_tag, $.self_closing_tag],
-    [$.static_statement, $.static_block],
-    [$.scriptlet_line, $.scriptlet_block],
   ],
 
   rules: {
@@ -42,19 +40,22 @@ module.exports = grammar({
       $.static_statement,
       $.class_block,
       $.style_block,
-      $.scriptlet_block,
-      $.scriptlet_line,
     ),
 
     _node: $ => choice(
       $.element,
       $.self_closing_tag,
+      $.void_element,
       $.dynamic_element,
       $.dynamic_self_closing_tag,
       $.if_tag,
+      $.else_if_tag,
+      $.else_tag,
       $.for_tag,
       $.while_tag,
       $.macro_tag,
+      $.scriptlet_block,
+      $.scriptlet_line,
       $.text,
       $.inline_expression,
       $.html_comment,
@@ -82,10 +83,9 @@ module.exports = grammar({
       '>',
     ),
 
-    end_tag: $ => seq(
-      '</',
-      $.tag_name,
-      '>',
+    end_tag: $ => choice(
+      seq('</', $.tag_name, '>'),
+      '</>',
     ),
 
     self_closing_tag: $ => seq(
@@ -102,22 +102,46 @@ module.exports = grammar({
       '/>',
     ),
 
+    // HTML void elements - self-closing without /> or closing tag
+    void_element: $ => seq(
+      '<',
+      alias($._void_tag_name, $.tag_name),
+      repeat($.attribute),
+      choice('>', '/>'),
+    ),
+
+    _void_tag_name: _ => token(prec(1, choice(
+      'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+      'link', 'meta', 'param', 'source', 'track', 'wbr',
+    ))),
+
     tag_variable: $ => seq(
       '/',
       $.identifier,
       optional(seq('=', $.attribute_value)),
     ),
 
-    tag_name: _ => /[a-zA-Z_][a-zA-Z0-9_-]*/,
+    tag_name: _ => /[@]?[a-zA-Z_][a-zA-Z0-9_-]*/,
 
     shorthand_class: _ => token(seq('.', /[a-zA-Z_-][a-zA-Z0-9_-]*/)),
     shorthand_id: _ => token(seq('#', /[a-zA-Z_-][a-zA-Z0-9_-]*/)),
 
     tag_parameters: $ => seq(
       '|',
-      $.identifier,
-      repeat(seq(',', $.identifier)),
+      $._tag_param,
+      repeat(seq(',', $._tag_param)),
       '|',
+    ),
+
+    _tag_param: $ => choice(
+      $.identifier,
+      $.destructured_param,
+    ),
+
+    destructured_param: $ => seq(
+      '{',
+      $._js_paren_expression,
+      '}',
     ),
 
     tag_argument: $ => seq(
@@ -127,54 +151,75 @@ module.exports = grammar({
     ),
 
     // Control flow tags
+    // Note: keywords like 'if', 'for' etc. are split from '<' so that
+    // tree-sitter's keyword extraction (via the `word` rule) handles
+    // word boundaries correctly. Without this, '<for' would greedily
+    // match the start of '<form>', '<if' would match '<iframe>', etc.
     if_tag: $ => seq(
-      '<if',
+      '<',
+      'if',
       $.tag_argument,
       '>',
       repeat($._node),
-      repeat($.else_if_tag),
-      optional($.else_tag),
-      '</if>',
+      '</',
+      'if',
+      '>',
     ),
 
     else_if_tag: $ => seq(
-      '<else-if',
+      '<',
+      'else-if',
       $.tag_argument,
       '>',
       repeat($._node),
-      '</else-if>',
+      '</',
+      'else-if',
+      '>',
     ),
 
     else_tag: $ => seq(
-      '<else>',
+      '<',
+      'else',
+      '>',
       repeat($._node),
-      '</else>',
+      '</',
+      'else',
+      '>',
     ),
 
     for_tag: $ => seq(
-      '<for',
+      '<',
+      'for',
       optional($.tag_parameters),
       repeat($.attribute),
       '>',
       repeat($._node),
-      '</for>',
+      '</',
+      'for',
+      '>',
     ),
 
     while_tag: $ => seq(
-      '<while',
+      '<',
+      'while',
       $.tag_argument,
       '>',
       repeat($._node),
-      '</while>',
+      '</',
+      'while',
+      '>',
     ),
 
     macro_tag: $ => seq(
-      '<macro',
+      '<',
+      'macro',
       optional($.tag_parameters),
       repeat($.attribute),
       '>',
       repeat($._node),
-      '</macro>',
+      '</',
+      'macro',
+      '>',
     ),
 
     // Dynamic elements: <${expr}> ... </>
@@ -186,21 +231,23 @@ module.exports = grammar({
 
     dynamic_start_tag: $ => seq(
       '<${',
-      $._js_expression,
+      $._js_paren_expression,
       '}',
+      optional($.tag_parameters),
       repeat($.attribute),
       '>',
     ),
 
     dynamic_end_tag: $ => choice(
       '</>',
-      seq('</${', $._js_expression, '}', '>'),
+      seq('</${', $._js_paren_expression, '}', '>'),
     ),
 
     dynamic_self_closing_tag: $ => seq(
       '<${',
-      $._js_expression,
+      $._js_paren_expression,
       '}',
+      optional($.tag_parameters),
       repeat($.attribute),
       '/>',
     ),
@@ -208,7 +255,7 @@ module.exports = grammar({
     // Top-level constructs
     import_statement: $ => seq(
       'import',
-      $._js_line_expression,
+      $._js_import_line,
     ),
 
     static_statement: $ => seq(
@@ -258,9 +305,12 @@ module.exports = grammar({
       seq(
         $.attribute_name,
         optional($.attribute_method_args),
-        optional(seq(
-          choice('=', ':='),
-          $.attribute_value,
+        optional(choice(
+          $.attribute_method_body,
+          seq(
+            choice('=', ':='),
+            $.attribute_value,
+          ),
         )),
       ),
     ),
@@ -269,6 +319,12 @@ module.exports = grammar({
       '(',
       optional($._js_paren_expression),
       ')',
+    ),
+
+    attribute_method_body: $ => seq(
+      '{',
+      optional($._raw_text),
+      '}',
     ),
 
     attribute_name: _ => /[a-zA-Z_:@][a-zA-Z0-9_:.@-]*/,
@@ -295,7 +351,7 @@ module.exports = grammar({
     // Inline expression: ${expr}
     inline_expression: $ => seq(
       '${',
-      $._js_expression,
+      $._js_paren_expression,
       '}',
     ),
 

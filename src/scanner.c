@@ -9,6 +9,7 @@ enum TokenType {
   JS_PAREN_EXPRESSION,
   JS_LINE_EXPRESSION,
   COMMENT_CONTENT,
+  JS_IMPORT_LINE,
 };
 
 static void skip_whitespace(TSLexer *lexer) {
@@ -41,7 +42,6 @@ static bool skip_string(TSLexer *lexer, int32_t quote) {
 }
 
 static void skip_line_comment_content(TSLexer *lexer) {
-  // Already past the // - just consume to end of line
   while (lexer->lookahead != 0 && lexer->lookahead != '\n') {
     lexer->advance(lexer, false);
   }
@@ -100,9 +100,9 @@ static bool scan_raw_text(TSLexer *lexer) {
 }
 
 // Scan a JS expression to end of line.
-// Handles strings that span across the line, and nested braces/parens.
-// Stops at newline at depth 0, consuming trailing semicolons.
-static bool scan_js_line_expression(TSLexer *lexer) {
+// skip_leading_brace: if true, refuse to match when first char is '{' (for
+//   static/$ which have block forms). False for import which allows { }.
+static bool scan_js_line_expression(TSLexer *lexer, bool skip_leading_brace, enum TokenType result_type) {
   bool has_content = false;
   int brace_depth = 0;
 
@@ -111,15 +111,14 @@ static bool scan_js_line_expression(TSLexer *lexer) {
     lexer->advance(lexer, true);
   }
 
-  // If first non-whitespace char is '{', don't match -
-  // let grammar handle block forms (static {}, $ {}, class {})
-  if (lexer->lookahead == '{') return false;
+  // For static/$ contexts, refuse '{' as first char to let block forms win
+  if (skip_leading_brace && lexer->lookahead == '{') return false;
 
   while (lexer->lookahead != 0) {
     if (brace_depth == 0 && (lexer->lookahead == '\n' || lexer->lookahead == '\r')) {
       if (has_content) {
         lexer->mark_end(lexer);
-        lexer->result_symbol = JS_LINE_EXPRESSION;
+        lexer->result_symbol = result_type;
         return true;
       }
       return false;
@@ -137,9 +136,8 @@ static bool scan_js_line_expression(TSLexer *lexer) {
       lexer->advance(lexer, false);
       has_content = true;
       if (lexer->lookahead == '/') {
-        // Line comment - this effectively ends the expression
-        // Don't consume the comment - let the expression end here
-        lexer->result_symbol = JS_LINE_EXPRESSION;
+        // Line comment ends the expression
+        lexer->result_symbol = result_type;
         return true;
       } else if (lexer->lookahead == '*') {
         skip_block_comment(lexer);
@@ -156,9 +154,8 @@ static bool scan_js_line_expression(TSLexer *lexer) {
     lexer->mark_end(lexer);
   }
 
-  // EOF
   if (has_content) {
-    lexer->result_symbol = JS_LINE_EXPRESSION;
+    lexer->result_symbol = result_type;
     return true;
   }
   return false;
@@ -189,7 +186,25 @@ static bool scan_js_expr(TSLexer *lexer, bool paren_mode, enum TokenType result_
       }
 
       if (!paren_mode) {
-        if (lexer->lookahead == '|' || lexer->lookahead == ',') {
+        if (lexer->lookahead == '|') {
+          // Peek ahead: || is JS logical OR, not a tag parameter delimiter
+          lexer->mark_end(lexer);
+          lexer->advance(lexer, false);
+          if (lexer->lookahead == '|') {
+            // It's ||, consume both and continue
+            has_content = true;
+            lexer->advance(lexer, false);
+            lexer->mark_end(lexer);
+            continue;
+          }
+          // Single |, it's a tag parameter delimiter
+          if (has_content) {
+            lexer->result_symbol = result_type;
+            return true;
+          }
+          return false;
+        }
+        if (lexer->lookahead == ',') {
           if (has_content) {
             lexer->mark_end(lexer);
             lexer->result_symbol = result_type;
@@ -209,8 +224,23 @@ static bool scan_js_expr(TSLexer *lexer, bool paren_mode, enum TokenType result_
             lexer->lookahead == '\r' || lexer->lookahead == '\n') {
           if (has_content) {
             lexer->mark_end(lexer);
-            lexer->result_symbol = result_type;
-            return true;
+            // Peek past whitespace to check if next is an operator
+            // continuation or a new attribute/tag boundary
+            skip_whitespace(lexer);
+            int32_t next = lexer->lookahead;
+            // Attribute names start with [a-zA-Z_:@], tag close is >, />
+            // These indicate the expression is done
+            if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z') ||
+                next == '_' || next == ':' || next == '@' ||
+                next == '>' || next == '/' || next == '<' ||
+                next == '|' || next == 0) {
+              lexer->result_symbol = result_type;
+              return true;
+            }
+            // Otherwise it's an operator continuation (&&, ||, !, +, -, etc.)
+            // or spread (...), so continue scanning
+            has_content = true;
+            continue;
           }
           skip_whitespace(lexer);
           continue;
@@ -318,7 +348,19 @@ void tree_sitter_marko_external_scanner_deserialize(void *p, const char *b, unsi
 
 bool tree_sitter_marko_external_scanner_scan(void *payload, TSLexer *lexer,
                                               const bool *valid_symbols) {
-  if (valid_symbols[COMMENT_CONTENT]) {
+  // During error recovery, tree-sitter marks all externals as valid.
+  // Guard against this by checking if ALL are valid (which only happens
+  // during error recovery) and refusing to match.
+  if (valid_symbols[RAW_TEXT] && valid_symbols[JS_EXPRESSION] &&
+      valid_symbols[JS_PAREN_EXPRESSION] && valid_symbols[JS_LINE_EXPRESSION] &&
+      valid_symbols[COMMENT_CONTENT] && valid_symbols[JS_IMPORT_LINE]) {
+    return false;
+  }
+
+  // COMMENT_CONTENT: only match when it's specifically valid
+  // (not during error recovery where all tokens are valid)
+  if (valid_symbols[COMMENT_CONTENT] && !valid_symbols[RAW_TEXT] &&
+      !valid_symbols[JS_EXPRESSION] && !valid_symbols[JS_LINE_EXPRESSION]) {
     return scan_comment_content(lexer);
   }
 
@@ -327,9 +369,16 @@ bool tree_sitter_marko_external_scanner_scan(void *payload, TSLexer *lexer,
     return scan_raw_text(lexer);
   }
 
-  // JS_LINE_EXPRESSION: reads to end of line (for import, scriptlet line, static)
+  // JS_IMPORT_LINE: like JS_LINE_EXPRESSION but allows leading '{'
+  // for destructured imports like: import { toJS } from 'mobx'
+  if (valid_symbols[JS_IMPORT_LINE]) {
+    return scan_js_line_expression(lexer, false, JS_IMPORT_LINE);
+  }
+
+  // JS_LINE_EXPRESSION: reads to end of line (for static, scriptlet line)
+  // Always refuse leading '{' to let block forms (static {}, $ {}) win
   if (valid_symbols[JS_LINE_EXPRESSION] && !valid_symbols[JS_EXPRESSION]) {
-    return scan_js_line_expression(lexer);
+    return scan_js_line_expression(lexer, true, JS_LINE_EXPRESSION);
   }
 
   // JS_PAREN_EXPRESSION: inside tag_argument parens, only ) is a delimiter
