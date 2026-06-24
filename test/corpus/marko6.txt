@@ -9,7 +9,10 @@ Let tag variable
 (source_file
   (self_closing_tag
     (tag_name)
-    (tag_variable (identifier) (attribute_value))))
+    (tag_variable
+      (identifier)
+      (attribute_value
+        (js_expression)))))
 
 ==================
 Const tag variable
@@ -22,7 +25,10 @@ Const tag variable
 (source_file
   (self_closing_tag
     (tag_name)
-    (tag_variable (identifier) (attribute_value))))
+    (tag_variable
+      (identifier)
+      (attribute_value
+        (js_expression)))))
 
 ==================
 Id tag variable
@@ -35,7 +41,8 @@ Id tag variable
 (source_file
   (self_closing_tag
     (tag_name)
-    (tag_variable (identifier))))
+    (tag_variable
+      (identifier))))
 
 ==================
 Bound attribute
@@ -50,7 +57,8 @@ Bound attribute
     (tag_name)
     (attribute
       (attribute_name)
-      (attribute_value))))
+      (attribute_value
+        (js_expression)))))
 
 ==================
 Tag variable on element with body
@@ -66,9 +74,14 @@ Tag variable on element with body
   (element
     (start_tag
       (tag_name)
-      (tag_variable (identifier)))
+      (tag_variable
+        (identifier)))
     (element
-      (start_tag (tag_name))
-      (inline_expression)
-      (end_tag (tag_name)))
-    (end_tag (tag_name))))
+      (start_tag
+        (tag_name))
+      (inline_expression
+        (js_paren_expression))
+      (end_tag
+        (tag_name)))
+    (end_tag
+      (tag_name))))

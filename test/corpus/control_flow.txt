@@ -10,11 +10,14 @@ If with content
 
 (source_file
   (if_tag
-    (tag_argument)
+    (tag_argument
+      (js_paren_expression))
     (element
-      (start_tag (tag_name))
+      (start_tag
+        (tag_name))
       (text)
-      (end_tag (tag_name)))))
+      (end_tag
+        (tag_name)))))
 
 ==================
 If else chain
@@ -28,11 +31,14 @@ If else chain
 
 (source_file
   (if_tag
-    (tag_argument)
+    (tag_argument
+      (js_paren_expression))
     (element
-      (start_tag (tag_name))
+      (start_tag
+        (tag_name))
       (text)
-      (end_tag (tag_name)))))
+      (end_tag
+        (tag_name)))))
 
 ==================
 If else-if else
@@ -52,22 +58,30 @@ If else-if else
 
 (source_file
   (if_tag
-    (tag_argument)
+    (tag_argument
+      (js_paren_expression))
     (element
-      (start_tag (tag_name))
+      (start_tag
+        (tag_name))
       (text)
-      (end_tag (tag_name)))
+      (end_tag
+        (tag_name)))
     (else_if_tag
-      (tag_argument)
+      (tag_argument
+        (js_paren_expression))
       (element
-        (start_tag (tag_name))
+        (start_tag
+          (tag_name))
         (text)
-        (end_tag (tag_name))))
+        (end_tag
+          (tag_name))))
     (else_tag
       (element
-        (start_tag (tag_name))
+        (start_tag
+          (tag_name))
         (text)
-        (end_tag (tag_name))))))
+        (end_tag
+          (tag_name))))))
 
 ==================
 For of loop
@@ -81,12 +95,19 @@ For of loop
 
 (source_file
   (for_tag
-    (tag_parameters (identifier))
-    (attribute (attribute_name) (attribute_value))
+    (tag_parameters
+      (identifier))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (js_expression)))
     (element
-      (start_tag (tag_name))
-      (inline_expression)
-      (end_tag (tag_name)))))
+      (start_tag
+        (tag_name))
+      (inline_expression
+        (js_paren_expression))
+      (end_tag
+        (tag_name)))))
 
 ==================
 For of with index
@@ -100,12 +121,20 @@ For of with index
 
 (source_file
   (for_tag
-    (tag_parameters (identifier) (identifier))
-    (attribute (attribute_name) (attribute_value))
+    (tag_parameters
+      (identifier)
+      (identifier))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (js_expression)))
     (element
-      (start_tag (tag_name))
-      (inline_expression)
-      (end_tag (tag_name)))))
+      (start_tag
+        (tag_name))
+      (inline_expression
+        (js_paren_expression))
+      (end_tag
+        (tag_name)))))
 
 ==================
 For range
@@ -119,14 +148,27 @@ For range
 
 (source_file
   (for_tag
-    (tag_parameters (identifier))
-    (attribute (attribute_name) (attribute_value))
-    (attribute (attribute_name) (attribute_value))
-    (attribute (attribute_name) (attribute_value))
+    (tag_parameters
+      (identifier))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (js_expression)))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (js_expression)))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (js_expression)))
     (element
-      (start_tag (tag_name))
-      (inline_expression)
-      (end_tag (tag_name)))))
+      (start_tag
+        (tag_name))
+      (inline_expression
+        (js_paren_expression))
+      (end_tag
+        (tag_name)))))
 
 ==================
 While loop
@@ -140,11 +182,14 @@ While loop
 
 (source_file
   (while_tag
-    (tag_argument)
+    (tag_argument
+      (js_paren_expression))
     (element
-      (start_tag (tag_name))
+      (start_tag
+        (tag_name))
       (text)
-      (end_tag (tag_name)))))
+      (end_tag
+        (tag_name)))))
 
 ==================
 Macro with params
@@ -158,10 +203,17 @@ Macro with params
 
 (source_file
   (macro_tag
-    (tag_parameters (identifier))
-    (attribute (attribute_name) (attribute_value (quoted_string)))
+    (tag_parameters
+      (identifier))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (quoted_string)))
     (element
-      (start_tag (tag_name))
+      (start_tag
+        (tag_name))
       (text)
-      (inline_expression)
-      (end_tag (tag_name)))))
+      (inline_expression
+        (js_paren_expression))
+      (end_tag
+        (tag_name)))))

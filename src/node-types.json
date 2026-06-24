@@ -33,7 +33,17 @@
   {
     "type": "attribute_method_args",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "js_paren_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "attribute_method_body",
@@ -46,8 +56,12 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "js_expression",
+          "named": true
+        },
         {
           "type": "quoted_string",
           "named": true
@@ -63,7 +77,17 @@
   {
     "type": "destructured_param",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "js_paren_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "dynamic_element",
@@ -73,6 +97,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "block_comment",
+          "named": true
+        },
         {
           "type": "dynamic_element",
           "named": true
@@ -155,7 +183,17 @@
   {
     "type": "dynamic_end_tag",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "js_paren_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "dynamic_self_closing_tag",
@@ -163,14 +201,22 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "attribute",
           "named": true
         },
         {
+          "type": "js_paren_expression",
+          "named": true
+        },
+        {
           "type": "tag_parameters",
+          "named": true
+        },
+        {
+          "type": "tag_shorthand_value",
           "named": true
         }
       ]
@@ -182,14 +228,22 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "attribute",
           "named": true
         },
         {
+          "type": "js_paren_expression",
+          "named": true
+        },
+        {
           "type": "tag_parameters",
+          "named": true
+        },
+        {
+          "type": "tag_shorthand_value",
           "named": true
         }
       ]
@@ -203,6 +257,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "block_comment",
+          "named": true
+        },
         {
           "type": "dynamic_element",
           "named": true
@@ -291,6 +349,10 @@
       "required": true,
       "types": [
         {
+          "type": "block_comment",
+          "named": true
+        },
+        {
           "type": "dynamic_element",
           "named": true
         },
@@ -351,6 +413,10 @@
           "named": true
         },
         {
+          "type": "tag_shorthand_value",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         },
@@ -373,6 +439,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "block_comment",
+          "named": true
+        },
         {
           "type": "dynamic_element",
           "named": true
@@ -469,6 +539,10 @@
       "types": [
         {
           "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "block_comment",
           "named": true
         },
         {
@@ -570,6 +644,10 @@
       "required": true,
       "types": [
         {
+          "type": "block_comment",
+          "named": true
+        },
+        {
           "type": "dynamic_element",
           "named": true
         },
@@ -630,6 +708,10 @@
           "named": true
         },
         {
+          "type": "tag_shorthand_value",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         },
@@ -647,12 +729,32 @@
   {
     "type": "import_statement",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "js_import_line",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "inline_expression",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "js_paren_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "macro_tag",
@@ -664,6 +766,10 @@
       "types": [
         {
           "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "block_comment",
           "named": true
         },
         {
@@ -754,7 +860,17 @@
   {
     "type": "scriptlet_line",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "js_line_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "self_closing_tag",
@@ -789,6 +905,10 @@
           "named": true
         },
         {
+          "type": "tag_shorthand_value",
+          "named": true
+        },
+        {
           "type": "tag_variable",
           "named": true
         }
@@ -804,6 +924,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "block_comment",
+          "named": true
+        },
         {
           "type": "class_block",
           "named": true
@@ -898,7 +1022,17 @@
   {
     "type": "spread_attribute",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "js_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "start_tag",
@@ -933,6 +1067,10 @@
           "named": true
         },
         {
+          "type": "tag_shorthand_value",
+          "named": true
+        },
+        {
           "type": "tag_variable",
           "named": true
         }
@@ -947,7 +1085,17 @@
   {
     "type": "static_statement",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "js_line_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "style_block",
@@ -967,7 +1115,17 @@
   {
     "type": "tag_argument",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "js_paren_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "tag_parameters",
@@ -989,6 +1147,21 @@
     }
   },
   {
+    "type": "tag_shorthand_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute_value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "tag_variable",
     "named": true,
     "fields": {},
@@ -998,6 +1171,10 @@
       "types": [
         {
           "type": "attribute_value",
+          "named": true
+        },
+        {
+          "type": "destructured_param",
           "named": true
         },
         {
@@ -1034,6 +1211,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "block_comment",
+          "named": true
+        },
         {
           "type": "dynamic_element",
           "named": true
@@ -1092,6 +1273,10 @@
         },
         {
           "type": "tag_argument",
+          "named": true
+        },
+        {
+          "type": "tag_shorthand_value",
           "named": true
         },
         {
@@ -1186,6 +1371,10 @@
     "named": true
   },
   {
+    "type": "block_comment",
+    "named": true
+  },
+  {
     "type": "class",
     "named": false
   },
@@ -1216,6 +1405,22 @@
   {
     "type": "import",
     "named": false
+  },
+  {
+    "type": "js_expression",
+    "named": true
+  },
+  {
+    "type": "js_import_line",
+    "named": true
+  },
+  {
+    "type": "js_line_expression",
+    "named": true
+  },
+  {
+    "type": "js_paren_expression",
+    "named": true
   },
   {
     "type": "line_comment",

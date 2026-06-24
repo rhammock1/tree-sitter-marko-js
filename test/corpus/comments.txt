@@ -44,3 +44,28 @@ Empty HTML comment
 
 (source_file
   (html_comment))
+
+==================
+Block comment
+==================
+
+/* single line block comment */
+
+---
+
+(source_file
+  (block_comment))
+
+==================
+JSDoc block comment
+==================
+
+/**
+ * @typedef {Object} Input
+ * @property {string} name
+ */
+
+---
+
+(source_file
+  (block_comment))

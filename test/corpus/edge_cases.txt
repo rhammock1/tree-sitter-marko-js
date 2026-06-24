@@ -8,15 +8,21 @@ Deeply nested elements
 
 (source_file
   (element
-    (start_tag (tag_name))
+    (start_tag
+      (tag_name))
     (element
-      (start_tag (tag_name))
+      (start_tag
+        (tag_name))
       (element
-        (start_tag (tag_name))
+        (start_tag
+          (tag_name))
         (text)
-        (end_tag (tag_name)))
-      (end_tag (tag_name)))
-    (end_tag (tag_name))))
+        (end_tag
+          (tag_name)))
+      (end_tag
+        (tag_name)))
+    (end_tag
+      (tag_name))))
 
 ==================
 Empty self-closing tag
@@ -27,7 +33,8 @@ Empty self-closing tag
 ---
 
 (source_file
-  (self_closing_tag (tag_name)))
+  (self_closing_tag
+    (tag_name)))
 
 ==================
 Adjacent expressions
@@ -39,10 +46,14 @@ Adjacent expressions
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (inline_expression)
-    (inline_expression)
-    (end_tag (tag_name))))
+    (start_tag
+      (tag_name))
+    (inline_expression
+      (js_paren_expression))
+    (inline_expression
+      (js_paren_expression))
+    (end_tag
+      (tag_name))))
 
 ==================
 Tag with no attributes
@@ -54,8 +65,10 @@ Tag with no attributes
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (end_tag (tag_name))))
+    (start_tag
+      (tag_name))
+    (end_tag
+      (tag_name))))
 
 ==================
 At-prefixed tag name
@@ -69,9 +82,11 @@ At-prefixed tag name
 
 (source_file
   (element
-    (start_tag (tag_name))
+    (start_tag
+      (tag_name))
     (text)
-    (end_tag (tag_name))))
+    (end_tag
+      (tag_name))))
 
 ==================
 At-prefixed self-closing tag
@@ -82,7 +97,8 @@ At-prefixed self-closing tag
 ---
 
 (source_file
-  (self_closing_tag (tag_name)))
+  (self_closing_tag
+    (tag_name)))
 
 ==================
 Comment does not leak into content
@@ -94,11 +110,14 @@ Comment does not leak into content
 ---
 
 (source_file
-  (html_comment (comment_content))
+  (html_comment
+    (comment_content))
   (element
-    (start_tag (tag_name))
+    (start_tag
+      (tag_name))
     (text)
-    (end_tag (tag_name))))
+    (end_tag
+      (tag_name))))
 
 ==================
 Multiple comments with content between
@@ -111,12 +130,16 @@ Multiple comments with content between
 ---
 
 (source_file
-  (html_comment (comment_content))
+  (html_comment
+    (comment_content))
   (element
-    (start_tag (tag_name))
+    (start_tag
+      (tag_name))
     (text)
-    (end_tag (tag_name)))
-  (html_comment (comment_content)))
+    (end_tag
+      (tag_name)))
+  (html_comment
+    (comment_content)))
 
 ==================
 Inline expression with logical OR
@@ -128,9 +151,12 @@ Inline expression with logical OR
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (inline_expression)
-    (end_tag (tag_name))))
+    (start_tag
+      (tag_name))
+    (inline_expression
+      (js_paren_expression))
+    (end_tag
+      (tag_name))))
 
 ==================
 Inline expression with ternary
@@ -142,9 +168,12 @@ Inline expression with ternary
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (inline_expression)
-    (end_tag (tag_name))))
+    (start_tag
+      (tag_name))
+    (inline_expression
+      (js_paren_expression))
+    (end_tag
+      (tag_name))))
 
 ==================
 Attribute value with && operator
@@ -159,7 +188,8 @@ Attribute value with && operator
     (tag_name)
     (attribute
       (attribute_name)
-      (attribute_value))))
+      (attribute_value
+        (js_expression)))))
 
 ==================
 Scriptlet block inside element
@@ -175,9 +205,11 @@ Scriptlet block inside element
 
 (source_file
   (element
-    (start_tag (tag_name))
+    (start_tag
+      (tag_name))
     (scriptlet_block)
-    (end_tag (tag_name))))
+    (end_tag
+      (tag_name))))
 
 ==================
 Scriptlet line inside element
@@ -191,9 +223,12 @@ Scriptlet line inside element
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (scriptlet_line)
-    (end_tag (tag_name))))
+    (start_tag
+      (tag_name))
+    (scriptlet_line
+      (js_line_expression))
+    (end_tag
+      (tag_name))))
 
 ==================
 Attribute method body
@@ -224,6 +259,7 @@ Dynamic tag with ternary expression
 (source_file
   (dynamic_element
     (dynamic_start_tag
+      (js_paren_expression)
       (attribute
         (attribute_name)
         (attribute_value
@@ -241,8 +277,10 @@ Dynamic tag with tag parameters
 
 (source_file
   (dynamic_self_closing_tag
+    (js_paren_expression)
     (tag_parameters
-      (destructured_param))
+      (destructured_param
+        (js_paren_expression)))
     (attribute
       (attribute_name)
       (attribute_value
@@ -266,10 +304,12 @@ Sibling if else-if else
 
 (source_file
   (if_tag
-    (tag_argument)
+    (tag_argument
+      (js_paren_expression))
     (text))
   (else_if_tag
-    (tag_argument)
+    (tag_argument
+      (js_paren_expression))
     (text))
   (else_tag
     (text)))
@@ -287,10 +327,12 @@ Destructured tag parameters
 (source_file
   (for_tag
     (tag_parameters
-      (destructured_param))
+      (destructured_param
+        (js_paren_expression)))
     (attribute
       (attribute_name)
-      (attribute_value))
+      (attribute_value
+        (js_expression)))
     (text)))
 
 ==================
@@ -306,10 +348,13 @@ Void element hr
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (void_element (tag_name))
+    (start_tag
+      (tag_name))
+    (void_element
+      (tag_name))
     (text)
-    (end_tag (tag_name))))
+    (end_tag
+      (tag_name))))
 
 ==================
 Void element img with attributes
@@ -322,9 +367,18 @@ Void element img with attributes
 (source_file
   (void_element
     (tag_name)
-    (attribute (attribute_name) (attribute_value (quoted_string)))
-    (attribute (attribute_name) (attribute_value (quoted_string)))
-    (attribute (attribute_name) (attribute_value (quoted_string)))))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (quoted_string)))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (quoted_string)))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (quoted_string)))))
 
 ==================
 Void element br self-closing
@@ -335,7 +389,8 @@ Void element br self-closing
 ---
 
 (source_file
-  (void_element (tag_name)))
+  (void_element
+    (tag_name)))
 
 ==================
 Void input with attributes
@@ -348,9 +403,18 @@ Void input with attributes
 (source_file
   (void_element
     (tag_name)
-    (attribute (attribute_name) (attribute_value (quoted_string)))
-    (attribute (attribute_name) (attribute_value (quoted_string)))
-    (attribute (attribute_name) (attribute_value))))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (quoted_string)))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (quoted_string)))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (js_expression)))))
 
 ==================
 Shorthand close tag
@@ -362,7 +426,8 @@ Shorthand close tag
 
 (source_file
   (element
-    (start_tag (tag_name))
+    (start_tag
+      (tag_name))
     (text)
     (end_tag)))
 
@@ -379,11 +444,17 @@ Dynamic element with shorthand close
 (source_file
   (dynamic_element
     (dynamic_start_tag
-      (attribute (attribute_name) (attribute_value)))
+      (js_paren_expression)
+      (attribute
+        (attribute_name)
+        (attribute_value
+          (js_expression))))
     (element
-      (start_tag (tag_name))
+      (start_tag
+        (tag_name))
       (text)
-      (end_tag (tag_name)))
+      (end_tag
+        (tag_name)))
     (dynamic_end_tag)))
 
 ==================
@@ -400,17 +471,25 @@ Form inside if tag
 
 (source_file
   (if_tag
-    (tag_argument)
+    (tag_argument
+      (js_paren_expression))
     (element
       (start_tag
         (tag_name)
-        (attribute (attribute_name) (attribute_value (quoted_string)))
-        (attribute (attribute_name)))
+        (attribute
+          (attribute_name)
+          (attribute_value
+            (quoted_string)))
+        (attribute
+          (attribute_name)))
       (element
-        (start_tag (tag_name))
+        (start_tag
+          (tag_name))
         (text)
-        (end_tag (tag_name)))
-      (end_tag (tag_name)))))
+        (end_tag
+          (tag_name)))
+      (end_tag
+        (tag_name)))))
 
 ==================
 For tag does not match form
@@ -428,12 +507,128 @@ For tag does not match form
   (element
     (start_tag
       (tag_name)
-      (attribute (attribute_name) (attribute_value (quoted_string))))
+      (attribute
+        (attribute_name)
+        (attribute_value
+          (quoted_string))))
     (for_tag
-      (tag_parameters (identifier))
-      (attribute (attribute_name) (attribute_value))
+      (tag_parameters
+        (identifier))
+      (attribute
+        (attribute_name)
+        (attribute_value
+          (js_expression)))
       (element
-        (start_tag (tag_name))
-        (inline_expression)
-        (end_tag (tag_name))))
-    (end_tag (tag_name))))
+        (start_tag
+          (tag_name))
+        (inline_expression
+          (js_paren_expression))
+        (end_tag
+          (tag_name))))
+    (end_tag
+      (tag_name))))
+
+==================
+Destructured tag variable
+==================
+
+<attrs/{name, age} />
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (tag_variable
+      (destructured_param
+        (js_paren_expression)))))
+
+==================
+Tag shorthand value on self-closing
+==================
+
+<return=val />
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (tag_shorthand_value
+      (attribute_value
+        (js_expression)))))
+
+==================
+Tag shorthand value on if
+==================
+
+<if=(condition)>
+  <div>content</div>
+</if>
+
+---
+
+(source_file
+  (if_tag
+    (tag_shorthand_value
+      (attribute_value
+        (js_expression)))
+    (element
+      (start_tag
+        (tag_name))
+      (text)
+      (end_tag
+        (tag_name)))))
+
+==================
+Arrow function in attribute value
+==================
+
+<observe/clientState=() => flags().clientState />
+
+---
+
+(source_file
+  (self_closing_tag
+    (tag_name)
+    (tag_variable
+      (identifier)
+      (attribute_value
+        (js_expression)))))
+
+==================
+Dynamic tag with shorthand value
+==================
+
+<${renderable}=[{value: val}] value=val />
+
+---
+
+(source_file
+  (dynamic_self_closing_tag
+    (js_paren_expression)
+    (tag_shorthand_value
+      (attribute_value
+        (js_expression)))
+    (attribute
+      (attribute_name)
+      (attribute_value
+        (js_expression)))))
+
+==================
+Static function with comments
+==================
+
+static function compare(a, b) {
+  // line comment inside
+  if(a === b) {
+    return true;
+  }
+  return false;
+}
+
+---
+
+(source_file
+  (static_statement
+    (js_line_expression)))

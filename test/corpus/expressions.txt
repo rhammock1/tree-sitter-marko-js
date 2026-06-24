@@ -8,9 +8,12 @@ Simple inline expression
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (inline_expression)
-    (end_tag (tag_name))))
+    (start_tag
+      (tag_name))
+    (inline_expression
+      (js_paren_expression))
+    (end_tag
+      (tag_name))))
 
 ==================
 Expression with property access
@@ -22,9 +25,12 @@ Expression with property access
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (inline_expression)
-    (end_tag (tag_name))))
+    (start_tag
+      (tag_name))
+    (inline_expression
+      (js_paren_expression))
+    (end_tag
+      (tag_name))))
 
 ==================
 Expression with function call
@@ -36,6 +42,9 @@ Expression with function call
 
 (source_file
   (element
-    (start_tag (tag_name))
-    (inline_expression)
-    (end_tag (tag_name))))
+    (start_tag
+      (tag_name))
+    (inline_expression
+      (js_paren_expression))
+    (end_tag
+      (tag_name))))

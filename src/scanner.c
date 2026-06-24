@@ -136,9 +136,15 @@ static bool scan_js_line_expression(TSLexer *lexer, bool skip_leading_brace, enu
       lexer->advance(lexer, false);
       has_content = true;
       if (lexer->lookahead == '/') {
-        // Line comment ends the expression
-        lexer->result_symbol = result_type;
-        return true;
+        if (brace_depth == 0) {
+          // Line comment ends the expression at top level
+          lexer->result_symbol = result_type;
+          return true;
+        }
+        // Inside braces, skip the line comment and continue
+        lexer->advance(lexer, false);
+        skip_line_comment_content(lexer);
+        lexer->mark_end(lexer);
       } else if (lexer->lookahead == '*') {
         skip_block_comment(lexer);
         lexer->mark_end(lexer);
@@ -168,6 +174,8 @@ static bool scan_js_expr(TSLexer *lexer, bool paren_mode, enum TokenType result_
   int bracket_depth = 0;
   int brace_depth = 0;
   bool has_content = false;
+  int32_t prev_char = 0;
+  bool after_arrow = false;
 
   skip_whitespace(lexer);
 
@@ -193,6 +201,7 @@ static bool scan_js_expr(TSLexer *lexer, bool paren_mode, enum TokenType result_
           if (lexer->lookahead == '|') {
             // It's ||, consume both and continue
             has_content = true;
+            prev_char = '|';
             lexer->advance(lexer, false);
             lexer->mark_end(lexer);
             continue;
@@ -213,6 +222,15 @@ static bool scan_js_expr(TSLexer *lexer, bool paren_mode, enum TokenType result_
           return false;
         }
         if (lexer->lookahead == '>') {
+          // Check for => (arrow function) - don't stop, it's an operator
+          if (prev_char == '=') {
+            has_content = true;
+            after_arrow = true;
+            prev_char = '>';
+            lexer->advance(lexer, false);
+            lexer->mark_end(lexer);
+            continue;
+          }
           if (has_content) {
             lexer->mark_end(lexer);
             lexer->result_symbol = result_type;
@@ -224,6 +242,13 @@ static bool scan_js_expr(TSLexer *lexer, bool paren_mode, enum TokenType result_
             lexer->lookahead == '\r' || lexer->lookahead == '\n') {
           if (has_content) {
             lexer->mark_end(lexer);
+            // After =>, the next token is the arrow body - don't stop
+            if (after_arrow) {
+              after_arrow = false;
+              skip_whitespace(lexer);
+              has_content = true;
+              continue;
+            }
             // Peek past whitespace to check if next is an operator
             // continuation or a new attribute/tag boundary
             skip_whitespace(lexer);
@@ -304,6 +329,7 @@ static bool scan_js_expr(TSLexer *lexer, bool paren_mode, enum TokenType result_
     else if (lexer->lookahead == '}') brace_depth--;
 
     has_content = true;
+    prev_char = lexer->lookahead;
     lexer->advance(lexer, false);
     lexer->mark_end(lexer);
   }

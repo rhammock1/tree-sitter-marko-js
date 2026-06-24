@@ -12,12 +12,17 @@ Single parameter
   (element
     (start_tag
       (tag_name)
-      (tag_parameters (identifier)))
+      (tag_parameters
+        (identifier)))
     (element
-      (start_tag (tag_name))
-      (inline_expression)
-      (end_tag (tag_name)))
-    (end_tag (tag_name))))
+      (start_tag
+        (tag_name))
+      (inline_expression
+        (js_paren_expression))
+      (end_tag
+        (tag_name)))
+    (end_tag
+      (tag_name))))
 
 ==================
 Multiple parameters
@@ -33,12 +38,18 @@ Multiple parameters
   (element
     (start_tag
       (tag_name)
-      (tag_parameters (identifier) (identifier) (identifier)))
+      (tag_parameters
+        (identifier)
+        (identifier)
+        (identifier)))
     (element
-      (start_tag (tag_name))
+      (start_tag
+        (tag_name))
       (text)
-      (end_tag (tag_name)))
-    (end_tag (tag_name))))
+      (end_tag
+        (tag_name)))
+    (end_tag
+      (tag_name))))
 
 ==================
 Parameters on self-closing
@@ -51,4 +62,5 @@ Parameters on self-closing
 (source_file
   (self_closing_tag
     (tag_name)
-    (tag_parameters (identifier))))
+    (tag_parameters
+      (identifier))))

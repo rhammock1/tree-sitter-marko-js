@@ -12,11 +12,11 @@ module.exports = grammar({
 
   externals: $ => [
     $._raw_text,
-    $._js_expression,
-    $._js_paren_expression,
-    $._js_line_expression,
+    $.js_expression,
+    $.js_paren_expression,
+    $.js_line_expression,
     $.comment_content,
-    $._js_import_line,
+    $.js_import_line,
   ],
 
   extras: $ => [/\s+/],
@@ -60,6 +60,7 @@ module.exports = grammar({
       $.inline_expression,
       $.html_comment,
       $.line_comment,
+      $.block_comment,
     ),
 
     // Elements
@@ -78,7 +79,10 @@ module.exports = grammar({
         $.shorthand_id,
       )),
       optional($.tag_parameters),
-      optional($.tag_argument),
+      optional(choice(
+        $.tag_argument,
+        $.tag_shorthand_value,
+      )),
       repeat($.attribute),
       '>',
     ),
@@ -97,7 +101,10 @@ module.exports = grammar({
         $.shorthand_id,
       )),
       optional($.tag_parameters),
-      optional($.tag_argument),
+      optional(choice(
+        $.tag_argument,
+        $.tag_shorthand_value,
+      )),
       repeat($.attribute),
       '/>',
     ),
@@ -115,11 +122,13 @@ module.exports = grammar({
       'link', 'meta', 'param', 'source', 'track', 'wbr',
     ))),
 
-    tag_variable: $ => seq(
+    tag_variable: $ => prec.right(1, seq(
       '/',
-      $.identifier,
-      optional(seq('=', $.attribute_value)),
-    ),
+      choice(
+        seq($.identifier, optional(seq('=', $.attribute_value))),
+        $.destructured_param,
+      ),
+    )),
 
     tag_name: _ => /[@]?[a-zA-Z_][a-zA-Z0-9_-]*/,
 
@@ -140,14 +149,20 @@ module.exports = grammar({
 
     destructured_param: $ => seq(
       '{',
-      $._js_paren_expression,
+      $.js_paren_expression,
       '}',
     ),
 
     tag_argument: $ => seq(
       '(',
-      $._js_paren_expression,
+      $.js_paren_expression,
       ')',
+    ),
+
+    // Tag shorthand value: <return=val/>, <if=condition>, etc.
+    tag_shorthand_value: $ => seq(
+      '=',
+      $.attribute_value,
     ),
 
     // Control flow tags
@@ -158,7 +173,7 @@ module.exports = grammar({
     if_tag: $ => seq(
       '<',
       'if',
-      $.tag_argument,
+      choice($.tag_argument, $.tag_shorthand_value),
       '>',
       repeat($._node),
       '</',
@@ -169,7 +184,7 @@ module.exports = grammar({
     else_if_tag: $ => seq(
       '<',
       'else-if',
-      $.tag_argument,
+      choice($.tag_argument, $.tag_shorthand_value),
       '>',
       repeat($._node),
       '</',
@@ -202,7 +217,7 @@ module.exports = grammar({
     while_tag: $ => seq(
       '<',
       'while',
-      $.tag_argument,
+      choice($.tag_argument, $.tag_shorthand_value),
       '>',
       repeat($._node),
       '</',
@@ -231,23 +246,25 @@ module.exports = grammar({
 
     dynamic_start_tag: $ => seq(
       '<${',
-      $._js_paren_expression,
+      $.js_paren_expression,
       '}',
       optional($.tag_parameters),
+      optional($.tag_shorthand_value),
       repeat($.attribute),
       '>',
     ),
 
     dynamic_end_tag: $ => choice(
       '</>',
-      seq('</${', $._js_paren_expression, '}', '>'),
+      seq('</${', $.js_paren_expression, '}', '>'),
     ),
 
     dynamic_self_closing_tag: $ => seq(
       '<${',
-      $._js_paren_expression,
+      $.js_paren_expression,
       '}',
       optional($.tag_parameters),
+      optional($.tag_shorthand_value),
       repeat($.attribute),
       '/>',
     ),
@@ -255,12 +272,12 @@ module.exports = grammar({
     // Top-level constructs
     import_statement: $ => seq(
       'import',
-      $._js_import_line,
+      $.js_import_line,
     ),
 
     static_statement: $ => seq(
       'static',
-      $._js_line_expression,
+      $.js_line_expression,
     ),
 
     static_block: $ => prec.dynamic(1, seq(
@@ -289,7 +306,7 @@ module.exports = grammar({
 
     scriptlet_line: $ => seq(
       '$',
-      $._js_line_expression,
+      $.js_line_expression,
     ),
 
     scriptlet_block: $ => prec.dynamic(1, seq(
@@ -317,7 +334,7 @@ module.exports = grammar({
 
     attribute_method_args: $ => seq(
       '(',
-      optional($._js_paren_expression),
+      optional($.js_paren_expression),
       ')',
     ),
 
@@ -331,12 +348,12 @@ module.exports = grammar({
 
     attribute_value: $ => choice(
       $.quoted_string,
-      $._js_expression,
+      $.js_expression,
     ),
 
     spread_attribute: $ => seq(
       '...',
-      $._js_expression,
+      $.js_expression,
     ),
 
     quoted_string: _ => choice(
@@ -351,7 +368,7 @@ module.exports = grammar({
     // Inline expression: ${expr}
     inline_expression: $ => seq(
       '${',
-      $._js_paren_expression,
+      $.js_paren_expression,
       '}',
     ),
 
@@ -363,6 +380,9 @@ module.exports = grammar({
     ),
 
     line_comment: _ => token(seq('//', /[^\n]*/)),
+
+    // Block comments: /* ... */ and /** ... */
+    block_comment: _ => token(seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/')),
 
     // Identifiers (for tag parameters)
     identifier: _ => /[a-zA-Z_$][a-zA-Z0-9_$]*/,

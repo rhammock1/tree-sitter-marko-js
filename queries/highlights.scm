@@ -63,6 +63,9 @@
 (tag_parameters (identifier) @variable.parameter)
 (destructured_param ["{" "}"] @punctuation.bracket)
 
+; Tag shorthand value - e.g. <return=val/>
+(tag_shorthand_value "=" @operator)
+
 ; Tag variables (Marko 6) - e.g. /count
 (tag_variable "/" @punctuation.special)
 (tag_variable (identifier) @variable)
@@ -89,6 +92,7 @@
 (html_comment "-->" @comment)
 (comment_content) @comment
 (line_comment) @comment
+(block_comment) @comment
 
 ; Inline expressions
 (inline_expression "${" @punctuation.special)

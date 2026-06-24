@@ -8,9 +8,14 @@ Spread attribute
 
 (source_file
   (element
-    (start_tag (tag_name) (attribute (spread_attribute)))
+    (start_tag
+      (tag_name)
+      (attribute
+        (spread_attribute
+          (js_expression))))
     (text)
-    (end_tag (tag_name))))
+    (end_tag
+      (tag_name))))
 
 ==================
 Dynamic tag
@@ -22,7 +27,8 @@ Dynamic tag
 
 (source_file
   (dynamic_element
-    (dynamic_start_tag)
+    (dynamic_start_tag
+      (js_paren_expression))
     (text)
     (dynamic_end_tag)))
 
@@ -35,7 +41,8 @@ Dynamic self-closing tag
 ---
 
 (source_file
-  (dynamic_self_closing_tag))
+  (dynamic_self_closing_tag
+    (js_paren_expression)))
 
 ==================
 Dynamic tag with attributes
@@ -48,7 +55,11 @@ Dynamic tag with attributes
 (source_file
   (dynamic_element
     (dynamic_start_tag
-      (attribute (attribute_name) (attribute_value (quoted_string))))
+      (js_paren_expression)
+      (attribute
+        (attribute_name)
+        (attribute_value
+          (quoted_string))))
     (text)
     (dynamic_end_tag)))
 
@@ -66,6 +77,8 @@ Method shorthand on-click
       (tag_name)
       (attribute
         (attribute_name)
-        (attribute_method_args)))
+        (attribute_method_args
+          (js_paren_expression))))
     (text)
-    (end_tag (tag_name))))
+    (end_tag
+      (tag_name))))
