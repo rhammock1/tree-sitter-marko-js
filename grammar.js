@@ -117,10 +117,15 @@ module.exports = grammar({
       choice('>', '/>'),
     ),
 
-    _void_tag_name: _ => token(prec(1, choice(
+    // No explicit token precedence: tree-sitter resolves lexer conflicts by
+    // precedence *before* match length, so a prec'd 'input' would beat the
+    // longer 'input-field'. Without it, longest-match wins for hyphenated
+    // custom elements, while the implicit string-over-regex rule still makes a
+    // bare <input> resolve to a void element over the tag_name regex.
+    _void_tag_name: _ => token(choice(
       'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
       'link', 'meta', 'param', 'source', 'track', 'wbr',
-    ))),
+    )),
 
     tag_variable: $ => prec.right(1, seq(
       '/',

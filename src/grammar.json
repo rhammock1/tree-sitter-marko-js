@@ -382,69 +382,65 @@
     "_void_tag_name": {
       "type": "TOKEN",
       "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "area"
-            },
-            {
-              "type": "STRING",
-              "value": "base"
-            },
-            {
-              "type": "STRING",
-              "value": "br"
-            },
-            {
-              "type": "STRING",
-              "value": "col"
-            },
-            {
-              "type": "STRING",
-              "value": "embed"
-            },
-            {
-              "type": "STRING",
-              "value": "hr"
-            },
-            {
-              "type": "STRING",
-              "value": "img"
-            },
-            {
-              "type": "STRING",
-              "value": "input"
-            },
-            {
-              "type": "STRING",
-              "value": "link"
-            },
-            {
-              "type": "STRING",
-              "value": "meta"
-            },
-            {
-              "type": "STRING",
-              "value": "param"
-            },
-            {
-              "type": "STRING",
-              "value": "source"
-            },
-            {
-              "type": "STRING",
-              "value": "track"
-            },
-            {
-              "type": "STRING",
-              "value": "wbr"
-            }
-          ]
-        }
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "area"
+          },
+          {
+            "type": "STRING",
+            "value": "base"
+          },
+          {
+            "type": "STRING",
+            "value": "br"
+          },
+          {
+            "type": "STRING",
+            "value": "col"
+          },
+          {
+            "type": "STRING",
+            "value": "embed"
+          },
+          {
+            "type": "STRING",
+            "value": "hr"
+          },
+          {
+            "type": "STRING",
+            "value": "img"
+          },
+          {
+            "type": "STRING",
+            "value": "input"
+          },
+          {
+            "type": "STRING",
+            "value": "link"
+          },
+          {
+            "type": "STRING",
+            "value": "meta"
+          },
+          {
+            "type": "STRING",
+            "value": "param"
+          },
+          {
+            "type": "STRING",
+            "value": "source"
+          },
+          {
+            "type": "STRING",
+            "value": "track"
+          },
+          {
+            "type": "STRING",
+            "value": "wbr"
+          }
+        ]
       }
     },
     "tag_variable": {
